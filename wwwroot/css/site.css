@@ -1,0 +1,99 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.search--input{
+  display: flex;
+  flex-direction: row;
+}
+
+.search--input>input{
+  flex-basis: auto;
+  border-radius: 0.25rem 0 0 0.25rem;
+}
+.search--input>button{
+  flex-basis: 50px;
+  border-radius: 0 0.25rem 0.25rem 0;
+}
+
+input:focus, select:focus, button:focus{
+  box-shadow: none !important;
+}
+
+.spinner--container{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.elements--pictures{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.elements--pictures>img{
+  padding: 1rem;
+  width: calc(100% / 3);
+  flex-basis: calc(100% / 3);
+  box-sizing: border-box;
+}
+
+.alert{
+  width: 100%;
+  text-align: center;
+}
+
+.accordion--header{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.accordion--header>.accordion--title {
+  width: auto;
+  padding: 1rem 1.25rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+}
+
+.accordion--header>.accordion--title>h2 {
+  font-size: 1.25rem;
+  margin: 0px;
+}
+
+.accordion--header>.accordion-button{
+  width: auto;
+}
+
+.favorite--button{
+  cursor: pointer;
+}

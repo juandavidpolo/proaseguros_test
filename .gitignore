@@ -1,0 +1,74 @@
+# Visual Studio files
+.vscode/
+*.suo
+*.sln
+*.vcxproj
+*.vcproj
+*.dbmdl
+*.pdb
+*.user
+*.userosscache
+*.suo
+*.cache
+*.iobj
+*.idb
+*.log
+*.pidb
+*.ilk
+*.mdf
+*.ldf
+*.bak
+*.cache
+*.cloudberry
+*.config
+*.vssscc
+*.vspscc
+*.opendb
+*.obj
+*.pch
+*.scc
+*.exp
+*.orig
+*.user
+*.VC.opendb
+*~
+
+# .NET-specific files
+bin/
+obj/
+.project
+.DS_Store
+
+# NuGet packages
+packages/
+*.nupkg
+*.pck
+
+# Rider files
+.idea/
+*.sln.iml
+*.csproj.user
+*.caches.json
+*.ide/
+*.testsettings
+*.rptproj.user
+
+# User-specific files
+*.userprefs
+*.usertasks
+*.user
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Ll]og/
+[Ll]ogs/
+[Oo]bj/
