@@ -6,6 +6,7 @@ namespace proaseguros_test.Models
   {
     public List<ResultModel>? Results { get; set; }
     public ContextModel? Context { get; set; }
+    public List<FavoriteItem>? Favorites { get; set; }
 
   }
 
@@ -122,6 +123,15 @@ namespace proaseguros_test.Models
     {
       Latitude = "";
       Longitude = "";
+    }
+  }
+
+  public class FavoriteItem
+  {
+    public string Fsq_id { get; set; }
+
+    public FavoriteItem(){
+      Fsq_id = "";
     }
   }
 }

@@ -50,7 +50,7 @@ function searchDetails(elementId, index){
           element.append(`<img src="${image.prefix}100x100${image.suffix}" />`);
         })
       }else if(response.length === 0){
-        element.append(`<div class="alert alert-warning" role="alert">No se encontraron imagenes</div>`);
+        element.append(`<div class="alert alert-warning" role="alert">No se encontraron imagenes del lugar</div>`);
       }
     },
     error: function (xhr, status, error) {
@@ -86,7 +86,7 @@ function searchTips(elementId, index) {
           element.append(newElement);
         })
       } else if (response.length === 0) {
-        element.append(`<div class="alert alert-warning" role="alert">No se encontraron imagenes</div>`);
+        element.append(`<div class="alert alert-warning" role="alert">No se encontraron comentarios del lugar</div>`);
       }
     },
     error: function (xhr, status, error) {
@@ -117,16 +117,24 @@ $(function(){
   $('[data-bs-toggle=tooltip').tooltip();
 })
 
+function switchFavorites(name, fsq_id, address, element){
+  isFavorite = Boolean($(element).attr('is-favorite'));
+  if (isFavorite === true) {
+    removeFromFavorites(fsq_id, element)
+  }else{
+    addToFavorites(name, fsq_id, address, element);
+  }
+}
+
 function addToFavorites(name, fsq_id, address, element){
-  let payload= JSON.stringify({
+  let payload = JSON.stringify({
     "User_id": 1,
     "Name": name,
     "Fsq_id": fsq_id,
     "address": address
   })
-  console.log("test: ", payload)
   $.ajax({
-    url: `http://localhost:5113/api/Favorites`,
+    url: `http://localhost:5113/api/FavoritesApi`,
     type: "POST",
     dataType: "json",
     contentType: "application/json",
@@ -134,7 +142,8 @@ function addToFavorites(name, fsq_id, address, element){
     success: function (response) {
       let newToast;
       let randomNumber = Math.floor(Math.random() * (10000 - 0 + 1)) + 0;
-      if(response.success){
+      if (response.success) {
+        element.setAttribute("is-favorite", "true");
         let svg = $(element).closest('span').find('svg');
         let path = svg.find('path');
         path.attr('fill', '#FFD700');
@@ -151,7 +160,7 @@ function addToFavorites(name, fsq_id, address, element){
         `;
         $('#toast-container').append(newToast);
         triggerToast(randomNumber);
-      }else{
+      } else {
         newToast = `
         <div id="liveToast-${randomNumber}" class="toast text-bg-warning" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="toast-header">
@@ -187,9 +196,86 @@ function addToFavorites(name, fsq_id, address, element){
   });
 }
 
+function removeFromFavorites(fsq_id, element, favView=false){
+  $.ajax({
+    url: `http://localhost:5113/api/FavoritesApi/${1}/${fsq_id}`,
+    type: "PUT",
+    dataType: "json",
+    contentType: "application/json",
+    success: function (response) {
+      let newToast;
+      let randomNumber = Math.floor(Math.random() * (10000 - 0 + 1)) + 0;
+      if (response.success) {
+        element.setAttribute("is-favorite", "");
+        let svg = $(element).closest('span').find('svg');
+        let path = svg.find('path');
+        path.attr('fill', '#FFFFFF');
+        newToast = `
+        <div id="liveToast-${randomNumber}" class="toast text-bg-success" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto">Favoritos</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                ${response.message}
+            </div>
+        </div>
+        `;
+        $('#toast-container').append(newToast);
+        triggerToast(randomNumber);
+        if (favView){
+          let target = $(element).attr('aria-describedby');
+          $(`#${target}`).remove();
+          let elementToRemove = $(element).closest('.accordion-item');
+          elementToRemove.remove();
+        }
+      } else {
+        newToast = `
+        <div id="liveToast-${randomNumber}" class="toast text-bg-warning" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto">Favoritos</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                ${response.message}
+            </div>
+        </div>
+        `;
+        $('#toast-container').append(newToast);
+        triggerToast(randomNumber);
+      }
+    },
+    error: function (xhr, status, error) {
+      let randomNumber = Math.floor(Math.random() * (10000 - 0 + 1)) + 0;
+      newToast = `
+        <div id="liveToast-${randomNumber}" class="toast text-bg-danger" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto">Error ${error}</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                Ha ocurrido un error al procesar tu solicitu
+            </div>
+        </div>
+        `;
+      $('#toast-container').append(newToast);
+      triggerToast(randomNumber);
+      console.error(error);
+    }
+  });
+}
+
 function triggerToast(randomNumber){
   const toastLiveExample = document.getElementById(`liveToast-${randomNumber}`)
-  console.log("test: ", toastLiveExample);
   const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
   toastBootstrap.show();
+}
+
+function seeFavDetails(fsq_id, index){
+  searchDetails(fsq_id, index);
+  searchTips(fsq_id, index);
+}
+
+function deleteFromFavoritesList(fsq_id, element){
+  removeFromFavorites(fsq_id, element, true)
 }
