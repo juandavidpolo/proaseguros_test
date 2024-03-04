@@ -41,7 +41,7 @@ namespace proaseguros_test.Controllers
 
             IDictionary<string, string?> parametersNullable = parameters;
 
-            var apiKey = "";
+            var apiKey = ""; //TODO env variable
 
             var client = new HttpClient();
             client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", apiKey);

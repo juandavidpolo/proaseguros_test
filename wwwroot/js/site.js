@@ -1,6 +1,7 @@
 ﻿function changeMarkerColor(element) {
   let attrValue = $(element).attr('aria-controls');
-  let markerIndex = attrValue.split("-")[1]
+  let markerIndex = attrValue.split("-")[1];
+  let isOpening = $(element).attr('aria-expanded');
 
   isInfoRequested = Boolean($(element).attr('complements-called'));
   if (isInfoRequested === false){
@@ -9,22 +10,34 @@
     searchTips(searchResult.Results[parseInt(markerIndex)].Fsq_id, markerIndex)
   }
 
-  for (let i = 0; i < markers.length; i++ ){
-    if (i === parseInt(markerIndex)){
-      markers[i].setIcon(L.icon({
-        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
-        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-      }));
-      markers[i].setOpacity(1);
-      markers[i].setZIndexOffset(1000);
-    }else{
-      markers[i].setIcon(L.icon({
+  if(isOpening === "true"){
+    markers.map((it, i) => {
+      if (i === parseInt(markerIndex)) {
+        map.setView([it._latlng.lat, it._latlng.lng], 13);
+        it.setIcon(L.icon({
+          iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+          shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        }));
+        it.setOpacity(1);
+        it.setZIndexOffset(1000);
+      } else {
+        it.setIcon(L.icon({
+          iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
+          shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        }));
+        it.setOpacity(0.75);
+        it.setZIndexOffset(0);
+      }
+    })
+  }else{
+    markers.map((it, i) => {
+      it.setIcon(L.icon({
         iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
         shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
       }));
-      markers[i].setOpacity(0.75);
-      markers[i].setZIndexOffset(0);
-    }
+      it.setOpacity(1);
+      it.setZIndexOffset(0);
+    })
   }
 }
 
@@ -150,7 +163,7 @@ function addToFavorites(name, fsq_id, address, element){
         newToast = `
         <div id="liveToast-${randomNumber}" class="toast text-bg-success" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="toast-header">
-                <strong class="me-auto">Bootstrap</strong>
+                <strong class="me-auto">Favoritos</strong>
                 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
             <div class="toast-body">
@@ -228,6 +241,18 @@ function removeFromFavorites(fsq_id, element, favView=false){
           $(`#${target}`).remove();
           let elementToRemove = $(element).closest('.accordion-item');
           elementToRemove.remove();
+
+          let parentElement = $('#accordionExample');
+          let numberOfChildren = parentElement.children().length;
+          if (numberOfChildren === 0){
+            $('#main-content').append(`
+            <div class="col col-12">
+              <div class="alert alert-warning" role="alert">
+                No hay lugares favoritos
+              </div>
+            </div>
+            `);
+          }
         }
       } else {
         newToast = `
@@ -278,4 +303,10 @@ function seeFavDetails(fsq_id, index){
 
 function deleteFromFavoritesList(fsq_id, element){
   removeFromFavorites(fsq_id, element, true)
+}
+
+function onClickMarker(index){
+  let elements = document.querySelectorAll(`.accordion-button`);
+  elements[index].click();
+  elements[index].scrollIntoView({ behavior: 'smooth' });
 }

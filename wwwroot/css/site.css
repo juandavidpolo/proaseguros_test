@@ -67,6 +67,10 @@ input:focus, select:focus, button:focus{
   text-align: center;
 }
 
+.accordion{
+  width: 100%;
+}
+
 .accordion--header{
   display: flex;
   flex-direction: row;

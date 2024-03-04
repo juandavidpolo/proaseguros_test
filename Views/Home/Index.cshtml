@@ -65,7 +65,7 @@
         document.querySelector('input[name="location"]').value = `51.505,-0.09`;
         if ("geolocation" in navigator) {
             navigator.geolocation.getCurrentPosition((position) => {
-                map.setView([position.coords.latitude, position.coords.longitude], 13);
+                map.setView([position.coords.latitude, position.coords.longitude], 12);
                 document.querySelector('input[name="location"]').value = `${position.coords.latitude},${position.coords.longitude}`;
             });
         }
